@@ -1,22 +1,50 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Weather & Clock
 
-# Run and deploy your AI Studio app
+Aplicación de clima y reloj mundial inspirada en One UI, con glassmorphism adaptativo, visuales dinámicos de día/noche y widgets para la pantalla de inicio.
 
-This contains everything you need to run your app locally.
+## Características
 
-View your app in AI Studio: https://ai.studio/apps/fecc84d4-2168-4d93-ae1b-445e5e6fd969
+- **Clima actual y pronóstico** con datos de [Open-Meteo](https://open-meteo.com) y fallback automático a [Met.no](https://api.met.no).
+- **Búsqueda de ciudades** avanzada (geocodificación con [Nominatim](https://nominatim.openstreetmap.org)).
+- **Reloj mundial** con doble reloj por ciudad.
+- **Widgets** de clima (2x2) y reloj dual (4x1) para la pantalla de inicio.
+- **Glassmorphism adaptativo**: la interfaz se adapta al tema claro/oscuro del sistema.
+- **Visuales dinámicos** de día/noche según la hora y el clima de cada ciudad.
+- **Notificaciones** de clima y persistencia local (Room + DataStore).
+- **Estudio de widgets**: personaliza el estilo de tus widgets.
 
-## Run Locally
+## Requisitos
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+- [Android Studio](https://developer.android.com/studio) (con Android SDK 36)
+- JDK 17+
 
+## Compilar
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
-7. If you have already published your app in AI Studio, please [request upload key reset](https://support.google.com/googleplay/android-developer/answer/9842756#zippy=%2Crequest-an-upload-key-reset) in Google Play Console.
+```bash
+./gradlew assembleDebug
+```
+
+El APK de depuración se genera en `app/build/outputs/apk/debug/app-debug.apk`.
+
+> El build de release requiere un keystore firmado. Define `KEYSTORE_PATH`, `STORE_PASSWORD` y `KEY_PASSWORD` en el entorno (ver `app/build.gradle.kts`).
+
+## Ejecutar localmente
+
+1. Abre el proyecto en Android Studio.
+2. (Opcional) Crea un archivo `.env` en la raíz con `GEMINI_API_KEY` si usas funciones de IA (ver `.env.example`).
+3. Ejecuta la app en un emulador o dispositivo físico.
+
+## CI Build & Releases
+
+Cada push a `main` dispara el workflow [Build & Release](.github/workflows/build-release.yml):
+
+1. Configura JDK 17, Android SDK y Gradle 9.3.1 (wrapper incluido).
+2. Crea un `.env` temporal con secretos placeholder y un keystore de debug.
+3. Ejecuta `./gradlew assembleDebug`.
+4. Si el build funciona, crea una GitHub Release etiquetada `build-<sha>` con el APK (`app-debug.apk`).
+
+También puedes ejecutarlo manualmente desde la pestaña **Actions**. La release solo se crea cuando el build pasa.
+
+## Licencia
+
+Ver [LICENSE](LICENSE).
