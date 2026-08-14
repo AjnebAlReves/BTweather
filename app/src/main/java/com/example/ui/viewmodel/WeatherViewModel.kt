@@ -36,7 +36,7 @@ data class WeatherUiState(
     val isRefreshing: Boolean = false,
     val isLocating: Boolean = false,
     val locationErrorMessage: String? = null,
-    val selectedCity: WorldClockItem = PredefinedCities.list.first { it.cityName == "Olathe" },
+    val selectedCity: WorldClockItem? = null,
     val weatherData: WeatherData? = null,
     val savedCities: List<WorldClockItem> = emptyList(),
     val searchResults: List<WorldClockItem> = emptyList(),
@@ -84,12 +84,18 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             }
         }
 
-        // Check if location permission is already granted and autoLocate is on
-        if (LocationServiceManager.hasLocationPermission(application) && LocationServiceManager.isLocationServiceEnabled(application)) {
-            detectCurrentLocation(application)
-        } else {
-            // Load initial weather for default selected city
-            loadWeatherForCity(_uiState.value.selectedCity, forceRefresh = false)
+        // Restore last selected city and load initial weather
+        viewModelScope.launch {
+            val lastCity = settingsRepo.getLastSelectedCity().first()
+            val defaultCity = lastCity ?: PredefinedCities.list.first { it.id == "asu" }
+            _uiState.update { it.copy(selectedCity = defaultCity) }
+
+            // Check if location permission is already granted and autoLocate is on
+            if (LocationServiceManager.hasLocationPermission(application) && LocationServiceManager.isLocationServiceEnabled(application)) {
+                detectCurrentLocation(application)
+            } else {
+                loadWeatherForCity(defaultCity, forceRefresh = false)
+            }
         }
 
         // Periodic time tick
@@ -140,6 +146,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
     fun loadWeatherForCity(city: WorldClockItem, forceRefresh: Boolean = false) {
         viewModelScope.launch {
+            settingsRepo.saveLastSelectedCity(city)
             _uiState.update {
                 it.copy(
                     selectedCity = city,

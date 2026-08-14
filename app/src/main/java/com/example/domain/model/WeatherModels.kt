@@ -81,7 +81,7 @@ data class WeatherData(
     val uvIndex: Double,
     val pressureHpa: Double,
     val visibilityKm: Double = 10.0,
-    val airQualityIndex: Int = 28, // Good AQI
+    val airQualityIndex: Int = 28,
     val airQualityLabel: String = "Good",
     val sunriseTime: String = "06:15 AM",
     val sunsetTime: String = "08:30 PM",
@@ -91,7 +91,23 @@ data class WeatherData(
     val isGpsLocation: Boolean = false,
     val lastUpdatedMillis: Long = System.currentTimeMillis(),
     val providerUsed: String = "Open-Meteo"
-)
+) {
+    val conditionIcon: String
+        get() = when (condition) {
+            WeatherCondition.CLEAR_DAY -> "�����"
+            WeatherCondition.CLEAR_NIGHT -> "����"
+            WeatherCondition.PARTLY_CLOUDY_DAY -> "���"
+            WeatherCondition.PARTLY_CLOUDY_NIGHT -> "�����"
+            WeatherCondition.CLOUDY -> "�����"
+            WeatherCondition.FOG -> "�������"
+            WeatherCondition.DRIZZLE -> "�������"
+            WeatherCondition.RAIN -> "�������"
+            WeatherCondition.HEAVY_RAIN -> "������"
+            WeatherCondition.THUNDERSTORM -> "������"
+            WeatherCondition.SNOW -> "������"
+            WeatherCondition.WINDY -> "����"
+        }
+}
 
 data class WorldClockItem(
     val id: String,

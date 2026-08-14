@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -14,6 +15,7 @@ import com.example.domain.model.TimeFormatPreference
 import com.example.domain.model.UserSettings
 import com.example.domain.model.WeatherProviderType
 import com.example.domain.model.WindSpeedUnit
+import com.example.domain.model.WorldClockItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -34,6 +36,13 @@ class UserSettingsDataStore(private val context: Context) {
         val SEVERE_ALERTS = booleanPreferencesKey("severe_alerts")
         val NOTIF_SOUND = booleanPreferencesKey("notif_sound")
         val AUTO_LOCATE = booleanPreferencesKey("auto_locate")
+        val SELECTED_CITY_ID = stringPreferencesKey("selected_city_id")
+        val SELECTED_CITY_NAME = stringPreferencesKey("selected_city_name")
+        val SELECTED_CITY_COUNTRY = stringPreferencesKey("selected_city_country")
+        val SELECTED_CITY_TIMEZONE = stringPreferencesKey("selected_city_timezone")
+        val SELECTED_CITY_LAT = doublePreferencesKey("selected_city_lat")
+        val SELECTED_CITY_LON = doublePreferencesKey("selected_city_lon")
+        val SELECTED_CITY_IS_GPS = booleanPreferencesKey("selected_city_is_gps")
     }
 
     val userSettingsFlow: Flow<UserSettings> = context.dataStore.data.map { pref ->
@@ -85,6 +94,22 @@ class UserSettingsDataStore(private val context: Context) {
         )
     }
 
+    val lastSelectedCityFlow: Flow<WorldClockItem?> = context.dataStore.data.map { pref ->
+        val id = pref[PreferencesKeys.SELECTED_CITY_ID]
+        val lat = pref[PreferencesKeys.SELECTED_CITY_LAT]
+        val lon = pref[PreferencesKeys.SELECTED_CITY_LON]
+        if (id == null || lat == null || lon == null) return@map null
+        WorldClockItem(
+            id = id,
+            cityName = pref[PreferencesKeys.SELECTED_CITY_NAME] ?: id,
+            countryName = pref[PreferencesKeys.SELECTED_CITY_COUNTRY] ?: "",
+            timezoneId = pref[PreferencesKeys.SELECTED_CITY_TIMEZONE] ?: "UTC",
+            latitude = lat,
+            longitude = lon,
+            isGpsLocation = pref[PreferencesKeys.SELECTED_CITY_IS_GPS] ?: false
+        )
+    }
+
     suspend fun saveSettings(settings: UserSettings) {
         context.dataStore.edit { pref ->
             pref[PreferencesKeys.TEMP_UNIT] = settings.temperatureUnit.name
@@ -99,6 +124,18 @@ class UserSettingsDataStore(private val context: Context) {
             pref[PreferencesKeys.SEVERE_ALERTS] = settings.severeWeatherAlertsEnabled
             pref[PreferencesKeys.NOTIF_SOUND] = settings.notificationSoundEnabled
             pref[PreferencesKeys.AUTO_LOCATE] = settings.autoLocateOnLaunch
+        }
+    }
+
+    suspend fun saveLastSelectedCity(city: WorldClockItem) {
+        context.dataStore.edit { pref ->
+            pref[PreferencesKeys.SELECTED_CITY_ID] = city.id
+            pref[PreferencesKeys.SELECTED_CITY_NAME] = city.cityName
+            pref[PreferencesKeys.SELECTED_CITY_COUNTRY] = city.countryName
+            pref[PreferencesKeys.SELECTED_CITY_TIMEZONE] = city.timezoneId
+            pref[PreferencesKeys.SELECTED_CITY_LAT] = city.latitude
+            pref[PreferencesKeys.SELECTED_CITY_LON] = city.longitude
+            pref[PreferencesKeys.SELECTED_CITY_IS_GPS] = city.isGpsLocation
         }
     }
 }

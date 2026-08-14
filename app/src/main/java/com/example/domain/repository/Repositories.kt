@@ -31,4 +31,6 @@ interface UserSettingsRepository {
     suspend fun updateTemperatureUnit(unit: com.example.domain.model.TemperatureUnit)
     suspend fun updateTimeFormat(format: com.example.domain.model.TimeFormatPreference)
     suspend fun updateProvider(provider: com.example.domain.model.WeatherProviderType, key: String)
+    fun getLastSelectedCity(): Flow<com.example.domain.model.WorldClockItem?>
+    suspend fun saveLastSelectedCity(city: com.example.domain.model.WorldClockItem)
 }

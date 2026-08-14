@@ -23,7 +23,7 @@
                 android:id="@+id/tv_weather_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Olathe"
+                android:text="Ciudad"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
                 android:textSize="18sp" />
@@ -32,16 +32,16 @@
                 android:id="@+id/tv_weather_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Partly Cloudy"
+                android:text="---"
                 android:textColor="#E0E7FF"
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <TextView
+<TextView
             android:id="@+id/tv_weather_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⛅"
+            android:text="--"
             android:textSize="26sp" />
     </LinearLayout>
 
@@ -60,7 +60,7 @@
             android:id="@+id/tv_weather_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="71°"
+            android:text="--°"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:textSize="34sp" />
@@ -74,7 +74,7 @@
             android:id="@+id/tv_weather_range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="H:83° L:54°"
+            android:text="--"
             android:textColor="#CBD5E1"
             android:textSize="12sp" />
     </LinearLayout>

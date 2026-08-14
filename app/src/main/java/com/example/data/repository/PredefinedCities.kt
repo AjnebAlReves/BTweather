@@ -5,6 +5,14 @@ import com.example.domain.model.WorldClockItem
 object PredefinedCities {
     val list = listOf(
         WorldClockItem(
+            id = "asu",
+            cityName = "Asunción",
+            countryName = "Paraguay",
+            timezoneId = "America/Asuncion",
+            latitude = -25.2637,
+            longitude = -57.5759
+        ),
+        WorldClockItem(
             id = "seoul",
             cityName = "Seoul",
             countryName = "South Korea",

@@ -34,7 +34,7 @@
                     android:id="@+id/tv_city_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Seoul"
+                    android:text="Ciudad 1"
                     android:textColor="#D97706"
                     android:textStyle="bold"
                     android:textSize="15sp" />
@@ -43,19 +43,19 @@
                     android:id="@+id/tv_date_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sun 1 Dec"
+                    android:text="---"
                     android:textColor="#78350F"
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_badge_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="☀️ 22°"
-                android:textColor="#D97706"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+<TextView
+                    android:id="@+id/tv_badge_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--°"
+                    android:textColor="#D97706"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,7 +69,7 @@
                 android:id="@+id/tv_time_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12:45"
+                android:text="--:--"
                 android:textColor="#D97706"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="AM"
+                android:text=""
                 android:textColor="#D97706"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -113,7 +113,7 @@
                     android:id="@+id/tv_city_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="London"
+                    android:text="Ciudad 2"
                     android:textColor="#9E77ED"
                     android:textStyle="bold"
                     android:textSize="15sp" />
@@ -122,19 +122,19 @@
                     android:id="@+id/tv_date_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sat 30 Nov"
+                    android:text="---"
                     android:textColor="#E2E8F0"
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_badge_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🌙 11°"
-                android:textColor="#9E77ED"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+<TextView
+                    android:id="@+id/tv_badge_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--°"
+                    android:textColor="#9E77ED"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -148,7 +148,7 @@
                 android:id="@+id/tv_time_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3:45"
+                android:text="--:--"
                 android:textColor="#B4C6FF"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -158,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="PM"
+                android:text=""
                 android:textColor="#B4C6FF"
                 android:textSize="11sp"
                 android:textStyle="bold" />
