@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -133,7 +134,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                     }
                     // Fallback to loading default city if no weather loaded yet
                     if (_uiState.value.weatherData == null) {
-                        loadWeatherForCity(_uiState.value.selectedCity, forceRefresh = false)
+                        _uiState.value.selectedCity?.let { loadWeatherForCity(it, forceRefresh = false) }
                     }
                 }
             }
@@ -197,10 +198,12 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun refreshCurrentWeather() {
-        if (_uiState.value.selectedCity.isGpsLocation && LocationServiceManager.hasLocationPermission(getApplication())) {
-            detectCurrentLocation(getApplication())
-        } else {
-            loadWeatherForCity(_uiState.value.selectedCity, forceRefresh = true)
+        _uiState.value.selectedCity?.let { city ->
+            if (city.isGpsLocation && LocationServiceManager.hasLocationPermission(getApplication())) {
+                detectCurrentLocation(getApplication())
+            } else {
+                loadWeatherForCity(city, forceRefresh = true)
+            }
         }
         viewModelScope.launch {
             clockRepo.refreshClockTimes()

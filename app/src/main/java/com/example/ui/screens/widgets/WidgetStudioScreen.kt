@@ -57,6 +57,7 @@ import com.example.ui.components.OneUiClockCard
 import com.example.ui.components.WeatherConditionIcon
 import com.example.ui.viewmodel.WeatherUiState
 import com.example.ui.viewmodel.WeatherViewModel
+import com.example.data.repository.PredefinedCities
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -194,7 +195,7 @@ fun WidgetStudioScreen(
                             1 -> {
                                 // 2x2 Weather Widget Preview
                                 WeatherWidgetPreviewCard(
-                                    city = uiState.selectedCity,
+                                    city = uiState.selectedCity ?: PredefinedCities.list.first { it.id == "asu" },
                                     weather = uiState.weatherData,
                                     tempUnit = uiState.settings.temperatureUnit,
                                     alpha = widgetTransparency
@@ -203,7 +204,7 @@ fun WidgetStudioScreen(
                             2 -> {
                                 // 4x2 Full Weather & Clock Widget Preview
                                 FullWidgetPreviewCard(
-                                    city = uiState.selectedCity,
+                                    city = uiState.selectedCity ?: PredefinedCities.list.first { it.id == "asu" },
                                     secondaryCity = secondaryCity,
                                     weather = uiState.weatherData,
                                     tempUnit = uiState.settings.temperatureUnit,

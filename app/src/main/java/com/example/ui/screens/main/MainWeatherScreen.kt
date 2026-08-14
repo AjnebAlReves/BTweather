@@ -78,6 +78,7 @@ import com.example.ui.components.WeatherDetailGrid
 import com.example.ui.theme.WeatherGradients
 import com.example.ui.viewmodel.WeatherUiState
 import com.example.ui.viewmodel.WeatherViewModel
+import com.example.data.repository.PredefinedCities
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -153,13 +154,13 @@ fun MainWeatherScreen(
                             .padding(horizontal = 12.dp, vertical = 6.dp)
                     ) {
                         Text(
-                            text = uiState.selectedCity.cityName,
+                            text = uiState.selectedCity?.cityName ?: "---",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.White
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        if (uiState.selectedCity.isGpsLocation || (weather?.isGpsLocation == true)) {
+                        if (uiState.selectedCity?.isGpsLocation == true || (weather?.isGpsLocation == true)) {
                             Surface(
                                 shape = CircleShape,
                                 color = Color(0x554CAF50),
@@ -353,7 +354,7 @@ fun MainWeatherScreen(
     if (showCityPickerSheet) {
         CityPickerBottomSheet(
             savedCities = uiState.savedCities,
-            selectedCity = uiState.selectedCity,
+            selectedCity = uiState.selectedCity ?: PredefinedCities.list.first { it.id == "asu" },
             onCitySelected = { city ->
                 viewModel.loadWeatherForCity(city, forceRefresh = false)
                 showCityPickerSheet = false
@@ -711,7 +712,7 @@ fun QuickNavRow(
 @Composable
 fun CityPickerBottomSheet(
     savedCities: List<WorldClockItem>,
-    selectedCity: WorldClockItem,
+    selectedCity: WorldClockItem?,
     onCitySelected: (WorldClockItem) -> Unit,
     onLocateGps: () -> Unit,
     onAddNewCity: () -> Unit,
@@ -792,7 +793,7 @@ fun CityPickerBottomSheet(
                     .height(280.dp)
             ) {
                 items(savedCities) { city ->
-                    val isCurrent = city.cityName == selectedCity.cityName
+                    val isCurrent = selectedCity?.cityName == city.cityName
                     Surface(
                         shape = RoundedCornerShape(16.dp),
                         color = if (isCurrent) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),

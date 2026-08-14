@@ -28,14 +28,12 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.widget_weather_2x2)
 
             // Read last selected city and cached weather from persistence
-            val (cityName, weatherDesc, temp, tempRange, icon) = runBlocking {
+            val widgetData = runBlocking {
                 val dataStore = context.preferencesDataStore(name = "user_settings_pref")
-                val data = dataStore.data.first()
+                val prefs = dataStore.data.first()
                 
-                val cityId = data[stringPreferencesKey("selected_city_id")]
-                val cityName = data[stringPreferencesKey("selected_city_name")] ?: cityId ?: ""
-                val lat = data[doublePreferencesKey("selected_city_lat")] ?: 0.0
-                val lon = data[doublePreferencesKey("selected_city_lon")] ?: 0.0
+                val cityId = prefs[stringPreferencesKey("selected_city_id")]
+                val cityName = prefs[stringPreferencesKey("selected_city_name")] ?: cityId ?: ""
                 
                 if (cityName.isNotBlank()) {
                     val db = WeatherDatabase.getInstance(context)
@@ -46,7 +44,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                         val tempStr = "${weatherData.currentTempC.toInt()}°"
                         val rangeStr = "H:${weatherData.maxTempC.toInt()}° L:${weatherData.minTempC.toInt()}°"
                         val iconStr = weatherData.conditionIcon
-                        return@runBlocking cityName to desc to tempStr to rangeStr to iconStr
+                        return@runBlocking WidgetData(cityName, desc, tempStr, rangeStr, iconStr)
                     }
                 }
                 
@@ -62,19 +60,19 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                         val tempStr = "${weatherData.currentTempC.toInt()}°"
                         val rangeStr = "H:${weatherData.maxTempC.toInt()}° L:${weatherData.minTempC.toInt()}°"
                         val iconStr = weatherData.conditionIcon
-                        return@runBlocking city.cityName to desc to tempStr to rangeStr to iconStr
+                        return@runBlocking WidgetData(city.cityName, desc, tempStr, rangeStr, iconStr)
                     }
                 }
                 
                 // Default fallback
-                "Olathe" to "Partly Cloudy" to "71°" to "H:83° L:54°" to "�����"
+                WidgetData("Asunción", "Clear", "22°", "H:26° L:15°", "☀️")
             }
 
-            views.setTextViewText(R.id.tv_weather_city, cityName)
-            views.setTextViewText(R.id.tv_weather_desc, weatherDesc)
-            views.setTextViewText(R.id.tv_weather_temp, temp)
-            views.setTextViewText(R.id.tv_weather_range, tempRange)
-            views.setTextViewText(R.id.tv_weather_icon, icon)
+            views.setTextViewText(R.id.tv_weather_city, widgetData.cityName)
+            views.setTextViewText(R.id.tv_weather_desc, widgetData.weatherDesc)
+            views.setTextViewText(R.id.tv_weather_temp, widgetData.temp)
+            views.setTextViewText(R.id.tv_weather_range, widgetData.tempRange)
+            views.setTextViewText(R.id.tv_weather_icon, widgetData.icon)
 
             val intent = Intent(context, MainActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(
@@ -126,9 +124,15 @@ class WeatherWidgetProvider : AppWidgetProvider() {
         )
     }
 
+    private data class WidgetData(
+        val cityName: String,
+        val weatherDesc: String,
+        val temp: String,
+        val tempRange: String,
+        val icon: String
+    )
+
     companion object {
         private val Context.preferencesDataStore: androidx.datastore.core.DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(name = "user_settings_pref")
-    }
-}
     }
 }
