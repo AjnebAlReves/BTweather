@@ -1,0 +1,6 @@
+{
+  "name": "Weather & Clock",
+  "description": "One UI inspired Weather & World Clock with adaptive glassmorphism, Open-Meteo & Met.no fallback, dynamic day/night visuals, and widgets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
